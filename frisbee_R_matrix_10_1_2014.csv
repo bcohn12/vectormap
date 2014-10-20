@@ -1,0 +1,6 @@
+,LAT,PMAJ,TMAJ,TMIN,DELT1,DELT2,SUBSCAP,SUPRA,INFRA ,CORB,BIC,BRA,TRI,FCR,FCU,ECRL,ECU
+Shoulder (x - int/Ext Rot),-3.3,-1.9,-2,1.8,-1.9,0.8,-1.9,0,2.3,0,0,0,0,0,0,0,0
+Shoulder (y - add/abd),3.3,1.9,2,0,-1.9,-0.8,0,-1,0,2,-3.6,0,2.1,0,0,0,0
+Shoulder (z - horiz add/abd),-3.3,1.9,0,-1.8,1.9,-0.8,0,0,-2.3,2,0,0,0,0,0,0,0
+Elbow (z - flex/ext),0,0,0,0,0,0,0,0,0,0,3.6,1.8,-2.1,0,0,0,0
+Wrist (y - flex/ext),0,0,0,0,0,0,0,0,0,0,0,0,0,1.4,1.9,-1.8,-2.3
