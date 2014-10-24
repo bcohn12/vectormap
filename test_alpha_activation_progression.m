@@ -1,7 +1,7 @@
 load('Sohn2013_hinlimb_models.mat')
 cat=1;
 n_alpha=5;
-n_unitvectors=2;
+n_unitvectors=1000;
 unit_vectors = random_surface_points(n_unitvectors);
 fmax_scale = 1;
 fval_scaling = fmax_scale;
@@ -22,4 +22,5 @@ for alpha = linspace(0.5,.9,n_alpha),
 	C{2,i} = lowerbound_mat;
 	C{3,i} = upperbound_mat;
 	i = i+1; %Increment Counter
+	disp(i)
 end
