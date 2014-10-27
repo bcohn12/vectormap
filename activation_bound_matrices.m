@@ -12,7 +12,7 @@ lowerbound_mat = [];
 upperbound_mat = [];
 lenmat = length(unitvectors(:,1));
 % iterate over every vector in unitvectors
-for row= 1:lenmat
+parfor row= 1:lenmat
     forcevec = [unitvectors(row,1), unitvectors(row,2), unitvectors(row,3), 0, 0, 0]; % current
     Fend = forcevec'; %defining an output direction (vector)
     Fend = Fend/norm(Fend,2);
