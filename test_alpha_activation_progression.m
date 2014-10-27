@@ -1,6 +1,6 @@
 load('Sohn2013_hinlimb_models.mat')
 cat=1;
-n_alpha=1;
+n_alpha=5;
 % n_unitvectors=50000;
 % unit_vectors = random_surface_points(n_unitvectors);
 unit_vectors = dlmread('vectors1.txt', ' ')
