@@ -1,8 +1,9 @@
 load('Sohn2013_hinlimb_models.mat')
 cat=1;
-n_alpha=5;
-n_unitvectors=2;
-unit_vectors = random_surface_points(n_unitvectors);
+n_alpha=1;
+% n_unitvectors=50000;
+% unit_vectors = random_surface_points(n_unitvectors);
+unit_vectors = dlmread('vectors1.txt', ' ')
 fmax_scale = 1;
 fval_scaling = fmax_scale;
 cat_Fm = diag(afl95 * (fmax_scale*fmax .* cosa95));
@@ -14,7 +15,6 @@ RFm = cat_R*diag_muscle_parameters;
 i = 1; %
 
 C = cell(3,n_alpha);
-
 for alpha = linspace(0.5,.9,n_alpha),
 	[ lowerbound_mat, upperbound_mat ] = activation_bound_matrices( ...
 					RFm, cat_J, unit_vectors, fval_scaling, alpha );
@@ -22,4 +22,5 @@ for alpha = linspace(0.5,.9,n_alpha),
 	C{2,i} = lowerbound_mat;
 	C{3,i} = upperbound_mat;
 	i = i+1; %Increment Counter
+	fprintf('step')
 end
