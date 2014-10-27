@@ -11,6 +11,8 @@ randpoint_num = length(unitvectors(:,1));
 lowerbound_mat = [];
 upperbound_mat = [];
 lenmat = length(unitvectors(:,1));
+
+h = waitbar(0, 'wait');
 % iterate over every vector in unitvectors
 for row= 1:lenmat
     forcevec = [unitvectors(row,1), unitvectors(row,2), unitvectors(row,3), 0, 0, 0]; % current
@@ -24,9 +26,8 @@ for row= 1:lenmat
     %Paste in the upper bound vector of activations
     hi_entry = [forcevec, hivec];
     upperbound_mat = [upperbound_mat ; hi_entry];
-    if mod(row, 1000) == 0
-        fprintf('Vectorpoint: : %u/ %u  \n',row, lenmat);
-    end
+    waitbar(row/lenmat)
 end
+close(h)
 
 end
