@@ -15,7 +15,7 @@ RFm = cat_R*diag_muscle_parameters;
 i = 1; %
 
 C = cell(3,n_alpha);
-parfor alpha = linspace(0.5,.9,n_alpha),
+for alpha = linspace(0.5,.9,n_alpha),
 	[ lowerbound_mat, upperbound_mat ] = activation_bound_matrices( ...
 					RFm, cat_J, unit_vectors, fval_scaling, alpha );
 	C{1,i} = strcat('Alpha=', num2str(alpha));
