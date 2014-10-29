@@ -12,6 +12,7 @@ function [] = task_scatter( task_matrix, muscle_number, log_transform )
 	    colorvec = task_matrix(:,muscle_number+6);
 	end
 	scatter3(task_matrix(:,1),task_matrix(:,2),task_matrix(:,3), 100,colorvec, 'fill')
+	pbaspect([1,1,1])
 	hold on
 	add_inter_sphere()
 
