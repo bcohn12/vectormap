@@ -65,8 +65,10 @@ def n_latlon2cartesian_mat(nlats,nlons):
     return cartesian_mat
 
 
-def savetxt_of_vectors():
-    a = n_latlon2cartesian_mat(20,40)
+def savetxt_of_vectors(plot=False):
+    a = n_latlon2cartesian_mat(540,1081)
+    if plot:
+        plot_unit_vectors(a)
     np.savetxt('vectors.txt',a)
 
 def plot_unit_vectors(a):

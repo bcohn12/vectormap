@@ -11,8 +11,15 @@ function [] = task_scatter( task_matrix, muscle_number, log_transform )
 	else
 	    colorvec = task_matrix(:,muscle_number+6);
 	end
+	figure1 = figure;
+	axes1 = axes('Parent',figure1);
 	scatter3(task_matrix(:,1),task_matrix(:,2),task_matrix(:,3), 100,colorvec, 'fill')
+	colorbar('peer',axes1,'EastOutside','YLim',[0.0 1.0]);
+	caxis([0, 1])
 	pbaspect([1,1,1])
+	xlabel('x')
+	ylabel('y')
+	zlabel('z')
 	hold on
 	add_inter_sphere()
 
