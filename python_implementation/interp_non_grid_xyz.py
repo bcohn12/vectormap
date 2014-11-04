@@ -1,6 +1,8 @@
 import numpy as np
 from mpl_toolkits.basemap import Basemap
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+from spherepoint_pick import random_dim_points
 
 def cart2sph(x, y, z):
     dxy = np.sqrt(x**2 + y**2)
@@ -18,11 +20,24 @@ def sph2cart(theta, phi, r=1):
     y = rcosphi * np.sin(theta)
     return x, y, z
 
+def scatter_unitvectors(xs,ys,zs):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(xs, ys, zs)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    plt.show()
+
+n_samples = 5000
+
 # random data
-pts = 1 - 2 * np.random.rand(500, 3)
+pts = 1 - 2 * np.random.rand(n_samples, 3)
 l = np.sqrt(np.sum(pts**2, axis=1))
 pts = pts / l[:, np.newaxis]
-T = 150 * np.random.rand(500)
+T = 150 * np.random.rand(n_samples)
+
+
 
 # naive IDW-like interpolation on regular grid
 theta, phi, r = cart2sph(*pts.T)
