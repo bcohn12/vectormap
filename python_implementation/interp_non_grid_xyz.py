@@ -37,10 +37,10 @@ l = np.sqrt(np.sum(pts**2, axis=1))
 pts = pts / l[:, np.newaxis]
 T = 150 * np.random.rand(n_samples)
 
-
+xyz_val = pts.T
 
 # naive IDW-like interpolation on regular grid
-theta, phi, r = cart2sph(*pts.T)
+theta, phi, r = cart2sph(*xyz_val)
 nrows, ncols = (90,180)
 lon, lat = np.meshgrid(np.linspace(0,360,ncols), np.linspace(-90,90,nrows))
 xg,yg,zg = sph2cart(lon,lat)
