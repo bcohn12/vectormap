@@ -13,5 +13,6 @@ diag_muscle_parameters = diag(afl95 * (fmax_scale*fmax .* cosa95));
 RFm = cat_R*diag_muscle_parameters;
 %End test parameters
 muscles_of_interest = [1, 5, 25, 30, 31];
+bounds_of_interest = [1,1] % compute for lower and upper
 [ lowerbound_mat, upperbound_mat ] = activation_bound_matrices( ...
-	RFm, cat_J, unit_vectors, fval_scaling, alpha, muscles_of_interest );
+	RFm, cat_J, unit_vectors, fval_scaling, alpha, muscles_of_interest, bounds_of_interest );

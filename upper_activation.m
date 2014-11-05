@@ -1,5 +1,7 @@
+
 function [ upper_activation ] = upper_activation( RFm, tau_max, alpha,...
 												 muscle_to_optimize)
+% takes in model parameters, outputs the upperbound activation (between 0 and 1, double)
     muscle_num = length(RFm(1,:));
     upperbound = ones(muscle_num,1) ; 
     lowerbound = zeros(muscle_num,1) ;

@@ -11,6 +11,6 @@ RFm = cat_R*diag_muscle_parameters;
 
 %muscles that will be collected into the matrix. all else will be set as negative 1 (an impossible activation)
 muscles_of_interest = [1, 5, 25, 30, 31];
-
-
-[lovec, hivec]= activations_vec_task_alpha(RFm, cat_J, Fend, alpha, muscles_of_interest)
+bounds_of_interest = 'lower_only';
+[lovec, hivec]= activations_vec_task_alpha(RFm, cat_J, Fend, alpha, muscles_of_interest, bounds_of_interest)
+%hivec should be a vector of -1.

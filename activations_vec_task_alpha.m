@@ -10,14 +10,14 @@
 % @param muscles_of_interest vector of integers representing muscle numbers
 function [lower_activation_vec,upper_activation_vec] = ...
 	activations_vec_task_alpha(...
-		RFm, J, Fend, alpha, muscles_of_interest)
+		RFm, J, Fend, alpha, muscles_of_interest, bounds_of_interest)
 	% Initialize the activation vectors
 	lower_activation_vec = [];
 	upper_activation_vec = [];
 	for muscle_i = 1:length(RFm) %maximize and minimize each muscle
 	% record the activation bounds for each muscle for the given Fend.
 		if ismember(muscle_i, muscles_of_interest)
-			[lo, hi] = task_vector_bounds(RFm, J, Fend, alpha, muscle_i);
+			[lo, hi] = task_vector_bounds(RFm, J, Fend, alpha, muscle_i, bounds_of_interest);
 			%Tag on the next muscle's bound value
 			lower_activation_vec = [lower_activation_vec , lo];
 			upper_activation_vec = [upper_activation_vec , hi];
