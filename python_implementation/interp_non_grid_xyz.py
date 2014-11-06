@@ -47,11 +47,13 @@ def interp_nongrid_xyz(pts, surfaceval):
             #v is the unknown point at the grid intersection
             v = np.array([xgrid[r,c], ygrid[r,c], zgrid[r,c]])
             # a vector containing all of the dotproducts
-            dotprod_of_vectors= np.dot(pts,v) +.0000000000000000001
+            dotprod_of_vectors= np.dot(pts,v)
             # angs is a vectors of the angles between the unknown point and the
             # rest of the points.
             # pdb.set_trace()
             # print repr(dotprod_of_vectors)
+            if 1 in dotprod_of_vectors>1:
+                print('TOO BIG')
             angs = np.arccos(dotprod_of_vectors)
             idx = np.where(angs == 0)[0]
             if idx.any():
