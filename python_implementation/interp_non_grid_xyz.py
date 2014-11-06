@@ -78,7 +78,7 @@ def interp_nongrid_xyz(pts, surfaceval):
     # compute native map projection coordinates of lat/lon grid.
     x, y = map(lon, lat)
     # contour data over the map.
-    cs = map.contourf(x, y, Ti, 15)
+    cs = map.contourf(x, y, Ti, 30,cmap=plt.cm.jet)
     plt.title('Contours of surfaceval')
     plt.show()
     return x,y,Ti
@@ -99,9 +99,9 @@ def test_xyz_activation_data():
 def test_xyz_fval():
     vector_dimensions=6
     fval_column_of_interest= 29
-    my_data = np.genfromtxt('../output/sampled_fval_mat_cat1_pointnum_10000scaling0.9.csv', delimiter=',')
+    my_data = np.genfromtxt('../output/sampled_fval_mat_cat1_pointnum_10000scaling1.csv', delimiter=',')
     pts = my_data.T[0:3].T
-    surfaceval = surfaceval = my_data.T[8]
+    surfaceval = surfaceval = my_data.T[6] #6 is fval
     return pts, surfaceval
 
 
