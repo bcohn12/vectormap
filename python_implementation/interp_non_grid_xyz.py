@@ -79,6 +79,16 @@ def interp_nongrid_xyz(pts, surfaceval):
     x, y = sphere_map(lon, lat)
     # contour data over the sphere_map.
     cs = sphere_map.contourf(x, y, Ti, 15)
+    
+    # add axis points and labels
+    axis_vectors = np.eye(3)
+    axis_labels = ['+x', '+y', '+z']
+    for i in range(3):
+        lat, lon, r = cart2sph(*tuple(axis_vectors[:,i]))
+        axis_proj_x, axis_proj_y = sphere_map(lat, lon)
+        plt.plot(axis_proj_x, axis_proj_y, 'ro', zorder=10)
+        plt.text(axis_proj_x, axis_proj_y, axis_labels[i], color='r', weight='bold', zorder=10)
+
     plt.title('Contours of surfaceval')
     plt.show()
     return x,y,Ti
