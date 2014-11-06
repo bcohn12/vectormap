@@ -70,15 +70,33 @@ def interp_nongrid_xyz(pts, surfaceval):
                 idw = (1 / angs**2) / sum_of_inv_squared_distances
                 Ti[r,c] = np.sum(surfaceval * idw)
 
-    # set up map projection
-    map = Basemap(projection='ortho', lat_0=45, lon_0=15)
+    # set up sphere_map projection
+    sphere_map = Basemap(projection='ortho', lat_0=45, lon_0=15)
     # draw lat/lon grid lines every 30 degrees.
-    map.drawmeridians(np.arange(0, 360, 30))
-    map.drawparallels(np.arange(-90, 90, 30))
+
+
     # compute native map projection coordinates of lat/lon grid.
     x, y = map(lon, lat)
     # contour data over the map.
     cs = map.contourf(x, y, Ti, 30,cmap=plt.cm.jet)
+
+    sphere_map.drawmeridians(np.arange(0, 360, 30))
+    sphere_map.drawparallels(np.arange(-90, 90, 30))
+    # compute native sphere_map projection coordinates of lat/lon grid.
+    x, y = sphere_map(lon, lat)
+    # contour data over the sphere_map.
+    # cs = sphere_map.contourf(x, y, Ti, 15)
+    
+    # add axis points and labels
+    axis_vectors = np.eye(3)
+    axis_labels = ['+x', '+y', '+z']
+    for i in range(3):
+        lat, lon, r = cart2sph(*tuple(axis_vectors[:,i]))
+        axis_proj_x, axis_proj_y = sphere_map(lat, lon)
+        plt.plot(axis_proj_x, axis_proj_y, 'ro', zorder=10)
+        plt.text(axis_proj_x, axis_proj_y, axis_labels[i], color='r', weight='bold', zorder=10)
+
+
     plt.title('Contours of surfaceval')
     plt.show()
     return x,y,Ti
