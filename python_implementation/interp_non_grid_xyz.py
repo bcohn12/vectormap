@@ -97,7 +97,6 @@ def test_xyz_activation_data():
     vector_dimensions=6
     fval_column_of_interest= 29
     my_data = np.genfromtxt('../output/submax_activation_alpha90_lower_m29.csv', delimiter=',')
-    xyz_coords = my_data.T[0:3] # grab the first three columns of x y and z
     pts = my_data.T[0:3].T
     # Subtract  one so we can get the indicies correct
     # For example, in an x,y,z,t_x,t_y,t_z dataset, dimensions=6, so the other columns
@@ -107,10 +106,21 @@ def test_xyz_activation_data():
     surfaceval = surfaceval = my_data.T[column_to_extract]
     return pts, surfaceval
 
+def test_xyz_fval():
+    vector_dimensions=6
+    fval_column_of_interest= 29
+    my_data = np.genfromtxt('../output/sampled_fval_mat_cat1_pointnum_10000scaling0.9.csv', delimiter=',')
+    pts = my_data.T[0:3].T
+    surfaceval = surfaceval = my_data.T[8]
+    return pts, surfaceval
+
+
 def main():
     # Experimental testing
     # ----------------------------------
     pts, surfaceval = test_xyz_activation_data()
+    x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
+    pts, surfaceval = test_xyz_fval()
     x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
     return Ti
 
