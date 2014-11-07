@@ -2,7 +2,7 @@ load('Sohn2013_hinlimb_models.mat')
 addpath('sphere_pointpicking/uniform_s2_sampling/');
 cat=1;
 n_alpha=5;
-n_unitvectors=2000;
+n_unitvectors=10000;
 pointpicking_method= 'triangulation';
 fmax_scale = 1;
 fval_scaling = fmax_scale;
@@ -33,3 +33,14 @@ end
 C = alpha_activation_progression(RFm, cat_J, unit_vectors, fval_scaling, n_alpha, alphamin, ...
 	alphamax, muscles_of_interest, bounds_of_interest, show_alpha_waitbar)
 
+compensated_muscles = [5, 19, 27];
+fmax_scaled = scale_muscle_fmax(fmax, compensated_muscles, 0.5); 
+
+diag_muscle_parameters = diag(afl95 * (fmax_scale*fmax_scaled .* cosa95));
+RFm = cat_R*diag_muscle_parameters;
+
+C_scaled = alpha_activation_progression(RFm, cat_J, unit_vectors, fval_scaling, n_alpha, alphamin, ...
+	alphamax, muscles_of_interest, bounds_of_interest, show_alpha_waitbar);
+
+save('C_scaled_13_14_16_18_19_20_21_23_25_30_27_5.mat', 'C_scaled')
+save('C_13_14_16_18_19_20_21_23_25_30_27_5.mat', 'C')
