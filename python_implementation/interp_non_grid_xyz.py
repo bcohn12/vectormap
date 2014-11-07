@@ -78,7 +78,6 @@ def interp_nongrid_xyz(pts, surfaceval):
     sphere_map.drawparallels(np.arange(-90, 90, 30))
     # compute native sphere_map projection coordinates of lat/lon grid.
     x, y = sphere_map(lon, lat)
-    
     # contour data over the sphere_map.
     threshold = 1e-1
     vmin=0+threshold
