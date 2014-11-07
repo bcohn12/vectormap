@@ -1,5 +1,6 @@
 import numpy as np
 import pdb
+import matplotlib
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
@@ -85,7 +86,10 @@ def interp_nongrid_xyz(pts, surfaceval):
     # compute native sphere_map projection coordinates of lat/lon grid.
     x, y = sphere_map(lon, lat)
     # contour data over the sphere_map.
-    # cs = sphere_map.contourf(x, y, Ti, 15)
+
+    cs = sphere_map.contourf(x, y, Ti, 15)
+    cs.cmap.set_under('black')
+    cs.cmap.set_over('pink')
     
     # add axis points and labels
     axis_vectors = np.eye(3)
