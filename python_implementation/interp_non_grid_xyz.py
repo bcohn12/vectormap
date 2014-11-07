@@ -1,6 +1,7 @@
 import numpy as np
 import pdb
 import matplotlib
+import pylab
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
@@ -31,6 +32,25 @@ def scatter_unitvectors(xs,ys,zs):
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
     plt.show()
+
+def cmap_bound_coloring(threshold=1e-1, vmin=0,vmax=1): 
+    """
+    @param threshold float Value which will define how much more than the min, and less than the max will be colored
+    @param vmin float minimum value to color
+    @param vmax float maximum value to color"""
+    threshold = 1e-1
+    vmin=vmin+threshold
+    vmax=vmax-threshold
+    debug = False # use debug colors for threshold value
+    if debug:
+        cmap = plt.cm.get_cmap('hot')
+        cmap.set_under('purple')
+        cmap.set_over('green')
+    else:
+        cmap = plt.cm.get_cmap('jet')
+        cmap.set_under('purple') # FIXME
+        cmap.set_over('blue')    # FIXME
+    return cmap, vmin, vmax
 
 def interp_nongrid_xyz(pts, surfaceval):
     """
@@ -78,20 +98,7 @@ def interp_nongrid_xyz(pts, surfaceval):
     sphere_map.drawparallels(np.arange(-90, 90, 30))
     # compute native sphere_map projection coordinates of lat/lon grid.
     x, y = sphere_map(lon, lat)
-    # contour data over the sphere_map.
-    threshold = 1e-1
-    vmin=0+threshold
-    vmax=1-threshold
-    debug = True # use debug colors for threshold value
-    if debug:
-        cmap = plt.cm.get_cmap('hot')
-        cmap.set_under('purple')
-        cmap.set_over('green')
-    else:
-        cmap = plt.cm.get_cmap('jet')
-        cmap.set_under('purple') # FIXME
-        cmap.set_over('blue')    # FIXME
-    
+    cmap, vmin, vmax = cmap_bound_coloring()
     cs = sphere_map.contourf(x, y, Ti, 15, cmap=cmap, extend='both', vmin=vmin, vmax=vmax)
     
     # add axis points and labels
@@ -104,6 +111,7 @@ def interp_nongrid_xyz(pts, surfaceval):
         plt.text(axis_proj_x, axis_proj_y, axis_labels[i], color='r', weight='bold', zorder=10)
 
     plt.title('Contours of surfaceval')
+    sphere_map.colorbar(location='bottom',pad='5%')
     plt.show()
     return x,y,Ti
 
@@ -120,12 +128,13 @@ def test_xyz_activation_data():
     surfaceval = surfaceval = my_data.T[column_to_extract]
     return pts, surfaceval
 
-def test_xyz_fval():
+def test_fval_matrix(col):
     vector_dimensions=6
     fval_column_of_interest= 29
-    my_data = np.genfromtxt('../output/sampled_fval_mat_cat1_pointnum_800scaling1.csv', delimiter=',')
+    my_data = np.genfromtxt('../output/sampled_fval_mat_cat1_pointnum_80scaling1.csv', delimiter=',')
     pts = my_data.T[0:3].T
-    surfaceval = surfaceval = my_data.T[-2]
+    surfaceval = surfaceval = my_data.T[col]
+   
     return pts, surfaceval
 
 
@@ -134,7 +143,8 @@ def main():
     # ----------------------------------
 #    pts, surfaceval = test_xyz_activation_data()
 #    x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
-    pts, surfaceval = test_xyz_fval()
+    pts, surfaceval = test_fval_matrix(-2)
+    pylab.hist(surfaceval, 50, normed=1, histtype='stepfilled')
     x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
     return Ti
 
