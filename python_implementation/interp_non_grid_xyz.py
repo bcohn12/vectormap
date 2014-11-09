@@ -131,7 +131,7 @@ def test_xyz_activation_data():
 def test_fval_matrix(col):
     vector_dimensions=6
     fval_column_of_interest= 29
-    my_data = np.genfromtxt('../output/sampled_fval_mat_cat1_pointnum_80scaling1.csv', delimiter=',')
+    my_data = np.genfromtxt('../output/sampled_fval_mat_cat1_pointnum_10000scaling1.csv', delimiter=',')
     pts = my_data.T[0:3].T
     surfaceval = surfaceval = my_data.T[col]
    
