@@ -139,10 +139,9 @@ def test_fval_matrix(col):
 
 
 def main():
-    # Experimental testing
-    # ----------------------------------
-#    pts, surfaceval = test_xyz_activation_data()
-#    x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
+    # Experimental testing ----------------------------------
+    # pts, surfaceval = test_xyz_activation_data()
+    # x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
     pts, surfaceval = test_fval_matrix(-2)
     pylab.hist(surfaceval, 50, normed=1, histtype='stepfilled')
     x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
@@ -150,5 +149,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
