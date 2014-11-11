@@ -10,5 +10,5 @@
 from scipy.io import loadmat
 from numpy.linalg import pinv
 from numpy import matrix, diag
-mat_data_struct = loadmat('/../C_13_13_16_18_19_20_21_23_25_30_27_5.mat')
+mat_data_struct = loadmat('C_13_13_16_18_19_20_21_23_25_30_27_5.mat')
 mat_data_struct.keys()

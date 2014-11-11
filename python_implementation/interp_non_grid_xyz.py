@@ -7,6 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from spherepoint_pick import random_dim_points
 import warnings
+from scipy.io import loadmat
 
 def cart2sph(x, y, z):
     dxy = np.sqrt(x**2 + y**2)
@@ -109,11 +110,8 @@ def interp_nongrid_xyz(pts, surfaceval):
         axis_proj_x, axis_proj_y = sphere_map(lat, lon)
         plt.plot(axis_proj_x, axis_proj_y, 'ro', zorder=10)
         plt.text(axis_proj_x, axis_proj_y, axis_labels[i], color='r', weight='bold', zorder=10)
-
-    plt.title('Contours of surfaceval')
     sphere_map.colorbar(location='bottom',pad='5%')
-    plt.show()
-    return x,y,Ti
+    return plt
 
 def test_xyz_activation_data():
     vector_dimensions=6
@@ -138,14 +136,22 @@ def test_fval_matrix(col):
     return pts, surfaceval
 
 
-def main():
+def test_interp_nongrid():
     # Experimental testing ----------------------------------
     # pts, surfaceval = test_xyz_activation_data()
     # x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
     pts, surfaceval = test_fval_matrix(-2)
     pylab.hist(surfaceval, 50, normed=1, histtype='stepfilled')
     x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
-    return Ti
+    return pts
+
+def main():
+    C_normal = loadmat('../output/C_13_14_16_18_19_20_21_23_25_30_27_5.mat')
+    example = C_normal['C']
+    pdb.set_trace()
+
+C_normal = loadmat('../output/C_13_14_16_18_19_20_21_23_25_30_27_5.mat')
+mat = C_normal['C'][1,4]
 
 if __name__ == '__main__':
     main()
