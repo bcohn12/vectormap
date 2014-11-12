@@ -151,8 +151,8 @@ def test_interp_nongrid():
     # pts, surfaceval = test_xyz_activation_data()
     # x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
     pts, surfaceval = test_fval_matrix(-2)
-    pylab.hist(surfaceval, 50, normed=1, histtype='stepfilled')
     plt =  interp_nongrid_xyz(pts,surfaceval)
+    plt.show()
     return pts
 
 def main():
