@@ -45,22 +45,29 @@ def cmap_bound_coloring(threshold=1e-1, vmin=0,vmax=1):
     debug = False # use debug colors for threshold value
     if debug:
         cmap = plt.cm.get_cmap('hot')
-        cmap.set_under('purple')
+        cmap.set_under('white')
         cmap.set_over('green')
     else:
-        cmap = plt.cm.get_cmap('jet')
-        cmap.set_under('purple') # FIXME
-        cmap.set_over('blue')    # FIXME
+        cmap = plt.cm.get_cmap('PuOr')
+        cmap.set_under('white') # FIXME
+        cmap.set_over('grey')    # FIXME
     return cmap, vmin, vmax
 
-def interp_nongrid_xyz(pts, surfaceval):
+def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360)):
     """
     @param pts an N by 3 numpy array containing the unitvectors.
     @param surfaceval an N-lengthed numpy array containing the values for each 
     """
     # naive IDW-like interpolation on regular grid
-    theta, phi, r = cart2sph(*pts.T)
-    nrows, ncols = (180,360)
+    #rotate data so y is up, z is towards you, and x is to the right.
+    # pdb.set_trace()
+    vert_cols = pts.T
+    data_x = vert_cols[:,2]
+    data_y = vert_cols[:,0]
+    data_z = vert_cols[:,1]
+
+    theta, phi, r = cart2sph(data_x,data_y,data_z)
+    nrows, ncols = grid_shape
     lon, lat = np.meshgrid(np.linspace(0,360,ncols), np.linspace(-90,90,nrows))
     xgrid,ygrid,zgrid = sph2cart(lon,lat)
     Ti = np.zeros_like(lon) #preallocate
@@ -93,23 +100,26 @@ def interp_nongrid_xyz(pts, surfaceval):
                 Ti[r,c] = np.sum(surfaceval * idw)
 
     # set up sphere_map projection
-    sphere_map = Basemap(projection='ortho', lat_0=45, lon_0=15)
+    sphere_map = Basemap(projection='ortho', lat_0=15, lon_0=15)
     # draw lat/lon grid lines every 30 degrees.
     sphere_map.drawmeridians(np.arange(0, 360, 30))
     sphere_map.drawparallels(np.arange(-90, 90, 30))
     # compute native sphere_map projection coordinates of lat/lon grid.
     x, y = sphere_map(lon, lat)
     cmap, vmin, vmax = cmap_bound_coloring()
-    cs = sphere_map.contourf(x, y, Ti, 15, cmap=cmap, extend='both', vmin=vmin, vmax=vmax)
+    cs = sphere_map.contourf(x, y, Ti, 15, cmap=cmap, extend='both',
+                             vmin=vmin, vmax=vmax)
     
+
     # add axis points and labels
-    axis_vectors = np.eye(3)
-    axis_labels = ['+x', '+y', '+z']
+    axis_vectors = np.eye(3) #generate unit vectors in each axis
+    axis_labels = ['+zNEW', '+xNEW', '+yNEW']
     for i in range(3):
         lat, lon, r = cart2sph(*tuple(axis_vectors[:,i]))
         axis_proj_x, axis_proj_y = sphere_map(lat, lon)
         plt.plot(axis_proj_x, axis_proj_y, 'ro', zorder=10)
-        plt.text(axis_proj_x, axis_proj_y, axis_labels[i], color='r', weight='bold', zorder=10)
+        plt.text(axis_proj_x, axis_proj_y, axis_labels[i], 
+            color='r', weight='bold', zorder=10)
     sphere_map.colorbar(location='bottom',pad='5%')
     return plt
 
@@ -142,13 +152,13 @@ def test_interp_nongrid():
     # x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
     pts, surfaceval = test_fval_matrix(-2)
     pylab.hist(surfaceval, 50, normed=1, histtype='stepfilled')
-    x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
+    plt =  interp_nongrid_xyz(pts,surfaceval)
     return pts
 
 def main():
     C_normal = loadmat('../output/C_13_14_16_18_19_20_21_23_25_30_27_5.mat')
     example = C_normal['C']
-    pdb.set_trace()
+    # pdb.set_trace()
 
 C_normal = loadmat('../output/C_13_14_16_18_19_20_21_23_25_30_27_5.mat')
 mat = C_normal['C'][1,4]
