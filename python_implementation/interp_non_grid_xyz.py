@@ -113,7 +113,7 @@ def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360)):
 
     # add axis points and labels
     axis_vectors = np.eye(3) #generate unit vectors in each axis
-    axis_labels = ['+zNEW', '+xNEW', '+yNEW']
+    axis_labels = ['+x', '+y', '+z']
     for i in range(3):
         lat, lon, r = cart2sph(*tuple(axis_vectors[:,i]))
         axis_proj_x, axis_proj_y = sphere_map(lat, lon)
