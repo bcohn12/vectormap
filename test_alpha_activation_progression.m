@@ -23,7 +23,7 @@ switch pointpicking_method
 		unit_vectors = random_surface_points(n_unitvectors);
 	case 'triangulation'
 		% Nitr is the number of triangle mnodification iterations to minimize energy.
-		[V,Tri,~,Ue]=ParticleSampleSphere('N',n_unitvectors, 'Nitr', 100);
+		[V,Tri,~,Ue]=ParticleSampleSphere('N',n_unitvectors, 'Nitr', 50);
 		unit_vectors = V;
 	case 'vectors1_from_python'
 		unit_vectors = dlmread('vectors1.txt', ' ');
@@ -42,5 +42,5 @@ RFm = cat_R*diag_muscle_parameters;
 C_scaled = alpha_activation_progression(RFm, cat_J, unit_vectors, fval_scaling, n_alpha, alphamin, ...
 	alphamax, muscles_of_interest, bounds_of_interest, show_alpha_waitbar);
 
-save('C_scaled_13_14_16_18_19_20_21_23_25_30_27_5.mat', 'C_scaled')
-save('C_13_14_16_18_19_20_21_23_25_30_27_5.mat', 'C')
+save('C_scaled_13_14_16_18_19_20_21_23_25_30_27_5_fiftyvecs.mat', 'C_scaled')
+save('C_13_14_16_18_19_20_21_23_25_30_27_5_fiftyvecs.mat', 'C')

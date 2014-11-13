@@ -1,0 +1,14 @@
+function [x_list,y] = gen_xy_circle(n)
+    r = 1;
+    x_list = [];
+    y_list = [];
+    %iterate from 0 to 2pi
+    for theta = linspace(0,2*pi, n)
+        %calculate what the x and y coordinates are based on theta
+        x = cos(theta);
+        y = sin(theta);
+        %add entries to the lists
+        x_list = [x_list; x];
+        y_list = [y_list; y];
+    end
+end
