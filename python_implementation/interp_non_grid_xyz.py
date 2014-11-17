@@ -49,19 +49,37 @@ def cmap_bound_coloring(threshold=1e-1, vmin=0,vmax=1):
         cmap.set_over('green')
     else:
         cmap = plt.cm.get_cmap('PuOr')
-        cmap.set_under('white') # FIXME
-        cmap.set_over('grey')    # FIXME
+        cmap.set_under('darkgrey') # FIXME
+        cmap.set_over('white')    # FIXME
     return cmap, vmin, vmax
 
-def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360)):
+def xyz_basemap_labels(plt, labels = ['+x','+y','+z'], color='r'):
+    """
+    add axis points and labels
+    @param plt A matplotlib plot object
+    @param labels A three element list of strings, one for each axis.
+    @return plt plot object with labels added
+    """
+    axis_vectors = np.eye(3) #generate unit vectors in each axis
+    for i in range(3):
+        lat, lon, r = cart2sph(*tuple(axis_vectors[:,i]))
+        axis_proj_x, axis_proj_y = sphere_map(lat, lon)
+        plt.plot(axis_proj_x, axis_proj_y, 'ro', zorder=10)
+        plt.text(axis_proj_x, axis_proj_y, labels[i], 
+            color='r', weight='bold', zorder=10)
+    return plt
+
+def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360), cmap_bounds=False, my_lat_0=15, my_lon_0=15):
     """
     @param pts an N by 3 numpy array containing the unitvectors.
     @param surfaceval an N-lengthed numpy array containing the values for each 
+    @TODO clean up subparts into smaller, reusable functions
     """
     # naive IDW-like interpolation on regular grid
     #rotate data so y is up, z is towards you, and x is to the right.
     # pdb.set_trace()
     vert_cols = pts.T
+    #NOTE cols are imported ZXY so orientation is correct
     data_x = vert_cols[:,2]
     data_y = vert_cols[:,0]
     data_z = vert_cols[:,1]
@@ -83,10 +101,6 @@ def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360)):
             dotprod_of_vectors= np.dot(pts,v) / dotprod_normalizer
             # angs is a vectors of the angles between the unknown point and the
             # rest of the points.
-            # pdb.set_trace()
-            # print repr(dotprod_of_vectors)
-            if 1 in dotprod_of_vectors>1:
-                print('TOO BIG')
             angs = np.arccos(dotprod_of_vectors)
             idx = np.where(angs == 0)[0]
             if idx.any():
@@ -100,20 +114,25 @@ def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360)):
                 Ti[r,c] = np.sum(surfaceval * idw)
 
     # set up sphere_map projection
-    sphere_map = Basemap(projection='ortho', lat_0=15, lon_0=15)
+    sphere_map = Basemap(projection='ortho', lat_0=my_lat_0, lon_0=my_lon_0)
     # draw lat/lon grid lines every 30 degrees.
     sphere_map.drawmeridians(np.arange(0, 360, 30))
     sphere_map.drawparallels(np.arange(-90, 90, 30))
     # compute native sphere_map projection coordinates of lat/lon grid.
     x, y = sphere_map(lon, lat)
-    cmap, vmin, vmax = cmap_bound_coloring()
-    cs = sphere_map.contourf(x, y, Ti, 15, cmap=cmap, extend='both',
-                             vmin=vmin, vmax=vmax)
+    #only color the bounds if specified (fval force vectormaps shouldn't have bounds)
+    if cmap_bounds:
+        cmap, vmin, vmax = cmap_bound_coloring() #color the bounds at top and bottom
+        cs = sphere_map.contourf(x, y, Ti, 15, cmap=cmap, extend='both',
+                                 vmin=vmin, vmax=vmax)
+    else: 
+        cmap = plt.cm.get_cmap('PuOr') #naIve coloring
+        cs = sphere_map.contourf(x, y, Ti, 15, cmap=cmap, extend='both')
     
 
     # add axis points and labels
     axis_vectors = np.eye(3) #generate unit vectors in each axis
-    axis_labels = ['+x', '+y', '+z']
+    axis_labels = ['+z', '+x', '+y'] #NOTE vector input is ZXY so it's oriented correctly
     for i in range(3):
         lat, lon, r = cart2sph(*tuple(axis_vectors[:,i]))
         axis_proj_x, axis_proj_y = sphere_map(lat, lon)
@@ -123,9 +142,9 @@ def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360)):
     sphere_map.colorbar(location='bottom',pad='5%')
     return plt
 
-def test_xyz_activation_data():
+def test_xyz_activation_data(muscle_num):
     vector_dimensions=6
-    fval_column_of_interest= 29
+    fval_column_of_interest= muscle_num
     my_data = np.genfromtxt('../output/submax_activation_alpha90_lower_m29.csv', delimiter=',')
     pts = my_data.T[0:3].T
     # Subtract  one so we can get the indicies correct
@@ -135,7 +154,15 @@ def test_xyz_activation_data():
     column_to_extract = vector_dimensions + fval_column_of_interest - 1
     surfaceval = surfaceval = my_data.T[column_to_extract]
     return pts, surfaceval
-
+def test_xyz_unscaled_alpha90_lower(muscle=13):
+    C_normal = loadmat('../output/C_13_14_16_18_19_20_21_23_25_30_27_5.mat')
+    mat = C_normal['C'][1,4]
+    def mat_muscle_index(muscle_num):
+        return muscle_num+5
+    muscle_vals = mat[:,mat_muscle_index(muscle)]
+    pltobj = interp_nongrid_xyz(mat[:,0:3], muscle_vals, (10,20))
+    print(muscle_vals)
+    return pltobj
 def test_fval_matrix(col):
     vector_dimensions=6
     fval_column_of_interest= 29
@@ -146,22 +173,39 @@ def test_fval_matrix(col):
     return pts, surfaceval
 
 
-def test_interp_nongrid():
+def test_fval(col, grid_resolution='lo'):
+    """
+    @param grid_resolution lo, med or hi. lo is a very fast implementation, hi takes a while.
+    """
     # Experimental testing ----------------------------------
     # pts, surfaceval = test_xyz_activation_data()
     # x,y,Ti = interp_nongrid_xyz(pts,surfaceval)
-    pts, surfaceval = test_fval_matrix(-2)
-    plt =  interp_nongrid_xyz(pts,surfaceval)
+    def resolution_case(x):
+        return {'hi': (180,360),
+                'med': (90,180),
+                'lo': (10,20)
+                        }[x]
+    grid_shape = resolution_case(grid_resolution)            
+    pts, surfaceval = test_fval_matrix(col)
+    plt =  interp_nongrid_xyz(pts,surfaceval, grid_shape)
     plt.show()
     return pts
 
-def main():
-    C_normal = loadmat('../output/C_13_14_16_18_19_20_21_23_25_30_27_5.mat')
-    example = C_normal['C']
-    # pdb.set_trace()
 
-C_normal = loadmat('../output/C_13_14_16_18_19_20_21_23_25_30_27_5.mat')
-mat = C_normal['C'][1,4]
 
-if __name__ == '__main__':
-    main()
+def test_alpha_activation(muscle_num=29, grid_resolution='lo'):
+    """
+    @param grid_resolution lo, med or hi. lo is a very fast implementation, hi takes a while.
+    """
+    # Experimental testing ----------------------------------
+    pts, surfaceval = test_xyz_activation_data(muscle_num)
+
+    def resolution_case(x):
+        return {'hi': (180,360),
+                'med': (90,180),
+                'lo': (10,20)
+                        }[x]
+    grid_shape = resolution_case(grid_resolution)
+    plt =  interp_nongrid_xyz(pts,surfaceval, grid_shape)
+    plt.show()
+    return pts
