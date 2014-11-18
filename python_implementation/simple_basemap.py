@@ -1,7 +1,7 @@
 from mpl_toolkits.basemap import Basemap
 import numpy as np
 import matplotlib.pyplot as plt
-
+robinson=True
 def cart2sph(x, y, z):
     dxy = np.sqrt(x**2 + y**2)
     r = np.sqrt(dxy**2 + z**2)
@@ -10,8 +10,8 @@ def cart2sph(x, y, z):
     theta, phi = np.rad2deg([theta, phi])
     return theta % 360, phi, r
 
-num_lons = 18
-num_lats = 9
+num_lons = 60
+num_lats = 30
 
 step_lons = 360. / num_lons
 step_lats = 180. / num_lats
@@ -28,7 +28,10 @@ print num_lats, len(lats)
 
 fig = plt.figure()
 ax = fig.add_axes([0.05,0.05,0.9,0.9])
-m = Basemap(projection='ortho', lat_0=90, lon_0=-90, resolution=None)
+if robinson:
+    m = Basemap(projection='robin', lat_0=0, lon_0=0, resolution=None)
+else:
+    m = Basemap(projection='ortho', lat_0=90, lon_0=-90, resolution=None)
 im = m.pcolormesh(lons, lats, data, shading='flat', cmap=plt.cm.jet, latlon=True)
 m.drawparallels(np.arange(-90.,99.,30.))
 m.drawmeridians(np.arange(-180.,180.,60.))
