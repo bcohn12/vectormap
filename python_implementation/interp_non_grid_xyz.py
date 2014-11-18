@@ -69,6 +69,30 @@ def xyz_basemap_labels(plt, labels = ['+x','+y','+z'], color='r'):
             color='r', weight='bold', zorder=10)
     return plt
 
+def generate_nice_grid(grid_shape=(180,360), showplot=False):
+    """
+    @param grid_shape integer tuple of the number of latitudes and longitudes in the meshgrid
+    @output X,Y,Z numpy arrays of the cartesian points
+    """
+    nrows, ncols = grid_shape
+    lon, lat = np.meshgrid(np.linspace(0,360,ncols), np.linspace(-90,90,nrows))
+    xgrid,ygrid,zgrid = sph2cart(lon,lat)
+    if showplot:
+        fig, ax = plt.subplots(subplot_kw=dict(projection='3d'))
+        ax.scatter(*(xgrid,ygrid,zgrid))
+        ax.set_aspect('equal')
+        plt.show()
+    return xgrid,ygrid,zgrid
+
+def save_grid_to_txt(grid_shape=(30,60)):
+    """
+    @param grid_shape integer tuple of the number of latitudes and longitudes in the meshgrid
+    @output uniform_grid_xyz.csv saved to current working directory.
+    """
+    X,Y,Z = generate_nice_grid(grid_shape)
+    a = np.asarray([ X, Y, Z ])
+    np.savetxt("uniform_grid_xyz.csv", a.flatten(), delimiter=",")
+
 def interp_nongrid_xyz(pts, surfaceval, grid_shape=(180,360), cmap_bounds=False, my_lat_0=15, my_lon_0=15):
     """
     @param pts an N by 3 numpy array containing the unitvectors.

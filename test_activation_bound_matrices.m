@@ -1,9 +1,8 @@
 load('Sohn2013_hinlimb_models.mat')
 %Set up test parameters
-alpha=0.5
+alpha=0.9
 cat=1;
-n_unitvectors=100;
-unit_vectors = random_surface_points(n_unitvectors);
+unit_vectors = mat_from_1d_csv();
 fmax_scale = 1;
 fval_scaling = fmax_scale;
 cat_Fm = diag(afl95 * (fmax_scale*fmax .* cosa95));
@@ -12,7 +11,7 @@ cat_J = Cats{1,cat}.J;
 diag_muscle_parameters = diag(afl95 * (fmax_scale*fmax .* cosa95));
 RFm = cat_R*diag_muscle_parameters;
 %End test parameters
-muscles_of_interest = [1, 5, 25, 30, 31];
-bounds_of_interest = [1,1] % compute for lower and upper
+muscles_of_interest = [30]; %these are the muscles we will compute. other muscles won't be computed
+bounds_of_interest = 'lower_only' % compute for lower and upper
 [ lowerbound_mat, upperbound_mat ] = activation_bound_matrices( ...
 	RFm, cat_J, unit_vectors, fval_scaling, alpha, muscles_of_interest, bounds_of_interest );
