@@ -17,7 +17,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from spherepoint_pick import random_dim_points
 import warnings
-from scipy.io import loadmat
+
 from matplotlib.backends.backend_pdf import PdfPages
 from interp_non_grid_xyz import *
 
