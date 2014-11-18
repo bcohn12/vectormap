@@ -29,7 +29,7 @@ print num_lats, len(lats)
 fig = plt.figure()
 ax = fig.add_axes([0.05,0.05,0.9,0.9])
 if robinson:
-    m = Basemap(projection='robin', lat_0=0, lon_0=0, resolution=None)
+    m = Basemap(projection='robin', lat_0=0, lon_0=-90, resolution=None)
 else:
     m = Basemap(projection='ortho', lat_0=90, lon_0=-90, resolution=None)
 im = m.pcolormesh(lons, lats, data, shading='flat', cmap=plt.cm.jet, latlon=True)
@@ -45,6 +45,7 @@ for i in range(3):
     plt.plot(axis_proj_x, axis_proj_y, 'ro', zorder=10)
     plt.text(axis_proj_x, axis_proj_y, axis_point_labels[i], color='r', weight='bold', zorder=10)
 
+#TODO add axis labels for the negative side of axes
 cb = m.colorbar(im,"bottom", size="5%", pad="2%")
 ax.set_title('m robin test')
 
