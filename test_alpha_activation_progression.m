@@ -3,7 +3,7 @@ addpath('sphere_pointpicking/uniform_s2_sampling/');
 cat=1;
 n_alpha=5;
 n_unitvectors=5000;
-pointpicking_method= 'triangulation';
+pointpicking_method= 'robinsonprep';
 fmax_scale = 1;
 fval_scaling = fmax_scale;
 cat_Fm = diag(afl95 * (fmax_scale*fmax .* cosa95));
@@ -27,6 +27,8 @@ switch pointpicking_method
 		unit_vectors = V;
 	case 'vectors1_from_python'
 		unit_vectors = dlmread('vectors1.txt', ' ');
+    case 'robinsonprep'
+        unit_vectors = mat_from_1d_csv();
 end
 % --------------------------------------------------
 %normal, preserved fmax version
@@ -43,8 +45,8 @@ RFm = cat_R*diag_muscle_parameters;
 C_scaled = alpha_activation_progression(RFm, cat_J, unit_vectors, fval_scaling, n_alpha, alphamin, ...
 	alphamax, muscles_of_interest, bounds_of_interest, show_alpha_waitbar);
 % save for later
-save('output/C_scaled_13_14_16_18_19_20_21_23_25_30_27_5_both.mat', 'C_scaled')
-save('output/C_13_14_16_18_19_20_21_23_25_30_27_5_both.mat', 'C')
+save('output/C_scaled_13_14_16_18_19_20_21_23_25_30_27_5_pre-robinson.mat', 'C_scaled')
+save('output/C_13_14_16_18_19_20_21_23_25_30_27_5_pre-robinson.mat', 'C')
 
 
 % Plot the progression for each muscle:
