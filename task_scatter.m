@@ -10,18 +10,22 @@ function [] = task_scatter( task_matrix, muscle_number, log_transform )
 	    colorvec = log10(task_matrix(:,muscle_number+6));
 	else
 	    colorvec = task_matrix(:,muscle_number+6);
-	end
+    end
 	figure1 = figure;
 	axes1 = axes('Parent',figure1);
-	scatter3(task_matrix(:,1),task_matrix(:,2),task_matrix(:,3), 100,colorvec, 'fill')
+	scatter3(task_matrix(:,1),task_matrix(:,3),task_matrix(:,2), 100,colorvec, 'fill')
 	colorbar('peer',axes1,'EastOutside','YLim',[0.0 1.0]);
 	caxis([0, 1])
 	pbaspect([1,1,1])
-	xlabel('x')
-	ylabel('y')
-	zlabel('z')
-% 	hold on
+    view(axes1,[-44.5 -26]);
+ 	xlabel('x')
+ 	ylabel('z')
+ 	zlabel('y')
+ 	hold on
 % 	add_inter_sphere()
+draw_xyz_lines(4);
+set(gca,'YDir','reverse');
+set(gca,'XColor',[1 1 1],'YColor',[1 1 1],'ZColor',[1 1 1], 'Color' , [1 1 1])
 
 end
 

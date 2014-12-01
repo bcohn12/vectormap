@@ -1,5 +1,5 @@
 function [MAT] = mat_from_1d_csv()
-    xyz_1d = readtable('python_implementation\uniform_grid_xyz.csv', 'ReadVariableNames',false);    
+    xyz_1d = readtable('python_implementation/uniform_grid_xyz.csv', 'ReadVariableNames',false);   
     xyz = table2array(xyz_1d);
     n = length(xyz)/3;
     MAT = zeros(n,6);
