@@ -2,7 +2,7 @@ load('Sohn2013_hinlimb_models.mat')
 addpath('sphere_pointpicking/uniform_s2_sampling/');
 cat=1;
 n_alpha=5;
-n_unitvectors=10000;
+n_unitvectors=5000;
 pointpicking_method= 'triangulation';
 fmax_scale = 1;
 fval_scaling = fmax_scale;
@@ -32,10 +32,11 @@ switch pointpicking_method
 end
 % --------------------------------------------------
 %normal, preserved fmax version
-% C = alpha_activation_progression(RFm, cat_J, unit_vectors, fval_scaling, n_alpha, alphamin, ...
-% 	alphamax, muscles_of_interest, bounds_of_interest, show_alpha_waitbar)
+ C = alpha_activation_progression(RFm, cat_J, unit_vectors, fval_scaling, n_alpha, alphamin, ...
+ 	alphamax, muscles_of_interest, bounds_of_interest, show_alpha_waitbar)
 
 % %make a compensated (scaled) version for a few muscles on one nerve
+if comp
  compensated_muscles = [5, 19, 27];
  fmax_scaled = scale_muscle_fmax(fmax, compensated_muscles, 0.5); 
  
@@ -47,7 +48,7 @@ end
 % % save for later
 % save('output/hidef_C_pre-robinson.mat', 'C')
 save('output/hidef_C_scaled_pre-robinson.mat', 'C_scaled')
-
+end
 
 
 % Plot the progression for each muscle:

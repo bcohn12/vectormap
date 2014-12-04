@@ -1,4 +1,4 @@
-function [ fval_matrix ] = fval_matrix_model_input( RFm, J, MAT, fval_scaling )
+function [ magnitudes, activations ] = fval_maximize( RFm, J, MAT, fval_scaling )
 %MAT is the matrix of XYZ vectors to check.
 % @output fval_matrix matrix with columns: x, y, z, tx, ty, tz, magnitude, lon, lat, TH, PHI, activation_vec
 % example:
@@ -28,5 +28,7 @@ for row= 1:lenmat
         fprintf('Vectorpoint: : %u/ %u  \n',row, lenmat);
     end
 end
+magnitudes = fval_matrix(:,7);
+activations = fval_matrix(:, 12:end);
 
 end
