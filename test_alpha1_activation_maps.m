@@ -37,7 +37,7 @@ title_str=' ';
 zerotorques = zeros(n_unitvectors,3);
 
 force_task_mat = [unit_vectors , zerotorques, magnitudes];
-force_task_scatter(force_task_mat,1,false);
+force_task_scatter(force_task_mat,1,false, false);
 pdf_task_scatter(title_str, 'figs/fval_max_cat1');
 activation_task_mat = [unit_vectors , zerotorques, activations];
 

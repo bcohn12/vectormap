@@ -1,4 +1,4 @@
-function [] = force_task_scatter( task_matrix, muscle_number, log_transform )
+function [] = force_task_scatter( task_matrix, muscle_number, log_transform, draw_axes )
 %fval_matrix, where the first 6 columns define the task vector. each row is
 %a task
 %muscle_number integer, from 1 to n muscles.
@@ -23,7 +23,9 @@ function [] = force_task_scatter( task_matrix, muscle_number, log_transform )
 %  	zlabel('y')
  	hold on
 % 	add_inter_sphere()
-% draw_xyz_lines(4);
+if draw_axes
+	draw_xyz_lines(4);
+end
 grid off
 colorbar('peer',axes1,'EastOutside');
 set(gca,'YDir','reverse');
