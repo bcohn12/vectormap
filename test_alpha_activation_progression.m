@@ -2,7 +2,7 @@ load('Sohn2013_hinlimb_models.mat')
 addpath('sphere_pointpicking/uniform_s2_sampling/');
 cat=1;
 n_alpha=5;
-n_unitvectors=5000;
+n_unitvectors=10000;
 pointpicking_method= 'triangulation';
 fmax_scale = 1;
 fval_scaling = fmax_scale;
@@ -16,6 +16,7 @@ bounds_of_interest = 'both';
 alphamin = 0.5;
 alphamax = 0.9;
 show_alpha_waitbar=true;
+comp=false;
 
 % --------------------------------------------------
 switch pointpicking_method
@@ -39,10 +40,10 @@ end
 if comp
  compensated_muscles = [5, 19, 27];
  fmax_scaled = scale_muscle_fmax(fmax, compensated_muscles, 0.5); 
- 
+
  diag_muscle_parameters = diag(afl95 * (fmax_scale*fmax_scaled .* cosa95));
  RFm = cat_R*diag_muscle_parameters;
- 
+
  C_scaled = alpha_activation_progression(RFm, cat_J, unit_vectors, fval_scaling, n_alpha, alphamin, ...
  	alphamax, muscles_of_interest, bounds_of_interest, show_alpha_waitbar);
 % % save for later
@@ -52,5 +53,5 @@ end
 
 
 % Plot the progression for each muscle:
-% pdfs_alpha_progression(C,31, 'hidef_normal_fmax')
+pdfs_alpha_progression(C,31, 'hidef_normal_fmax')
 % pdfs_alpha_progression(C_scaled,31, 'hidef_fmax_scaled_pero_50')    

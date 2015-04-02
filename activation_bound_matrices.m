@@ -12,7 +12,7 @@ lowerbound_mat = [];
 upperbound_mat = [];
 lenmat = length(unitvectors(:,1));
 
-% h = waitbar(0, 'wait');
+% h = waitbar(0, 'Cycling through each muscle');
 % for every unit vector in unitvectors, compute the activations upper and lower bound
 for row= 1:lenmat
     forcevec = [unitvectors(row,1), unitvectors(row,2), unitvectors(row,3),...
@@ -28,7 +28,9 @@ for row= 1:lenmat
     hi_entry = [forcevec, hivec];
     upperbound_mat = [upperbound_mat ; hi_entry];
     percentdone = row/lenmat;
-    % waitbar(percentdone);
+    if mod(row,10)==0
+        fprintf(strcat('alpha[', num2str(alpha), ']  Directions[', num2str(row), '/', num2str(lenmat), ']\n'))
+    % waitbar(percentdone, strcat(num2str(alpha),' is alpha;',num2str(row),' points so far'));
 end
 % close(h)
 
