@@ -1,3 +1,4 @@
+%% show params
 load('Sohn2013_hinlimb_models.mat')
 addpath('sphere_pointpicking/uniform_s2_sampling/');
 cat=1;
@@ -18,6 +19,7 @@ alphamax = 1;
 show_alpha_waitbar=true;
 
 % --------------------------------------------------
+%% Select random 3d points
 switch pointpicking_method
 	case 'random'
 		unit_vectors = random_surface_points(n_unitvectors);
@@ -30,7 +32,7 @@ switch pointpicking_method
     case 'robinsonprep'
         unit_vectors = mat_from_1d_csv();
 end
-% --------------------------------------------------
+%% --------------------------------------------------
 
 title_str=' ';
 [magnitudes, activations] = fval_maximize(RFm, cat_J, unit_vectors, 1);
