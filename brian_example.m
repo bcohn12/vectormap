@@ -4,7 +4,6 @@
 %@author Brian Cohn <brian_cohn14@pitzer.edu>
 %@version 1.0
 load('Sohn2013_hinlimb_models.mat')
-cd('/Users/Olive/Documents/dev/bbdl/cat_model/sohn_data') %temporary
 Fend = [1.1,1.9,0,0,0,0]'; %defining an output direction (vector)
 Fend = Fend/norm(Fend,2);
 muscle_num = 31;
