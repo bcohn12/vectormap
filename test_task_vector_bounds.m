@@ -42,7 +42,7 @@ muscles; % muscle names stored here
 % for every available muscle, for a given force task, let's get the lower
 % bound of activation and upper bound of activation
 lower_activation_vec = [];
-upper_activation_vec = [];
+upper_activation_vec = []; 
 for muscle_i = 1:length(RFm) %maximize and minimize each muscle
 	% record the activation bounds for each muscle for the given Fend.
 	[lo, hi] = task_vector_bounds(RFm, cat_J, Fend, alpha, muscle_i, bounds_of_interest);
@@ -50,6 +50,18 @@ for muscle_i = 1:length(RFm) %maximize and minimize each muscle
 	upper_activation_vec = [upper_activation_vec , hi];
 end
 
-%your goal:
-% 1. Pick your favorite leg muscle
-% 2. Design a question 
+%investigate what lower_activation_vec and upper_activation_vec both look
+%like. Change the force, and see how the muscle activation bounds change!
+
+xyz_directions_to_evaluate = random_surface_points(1000)
+%pick some random points on the sphere as directions to evaluate
+
+%Let's make a maximal feasible force space vectormap
+fval_matrix_maxforce = fval_matrix_model_input(Cats{1,1}.R * diag(afl95 * (fmax_scale*1 .* cosa95)),...
+                            Cats{1,1}.J, xyz_directions_to_evaluate,1)
+% this matrix has these columns: x, y, z, tx, ty, tz, magnitude, lon, lat,
+% TH, PHI, [activation_vec of length 31]
+
+fval_scatter(fval_matrix_maxforce, false)
+
+
